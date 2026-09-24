@@ -9,6 +9,10 @@ app.set('views', path.join(__dirname, 'view'));
 // Sajikan file statis (seperti gambar, CSS, JS) dari folder 'public'
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Modul UMKM Booster: halaman dan aset legacy diakses melalui Express.
+const umkmBoosterPath = path.join(__dirname, 'umkmbooster');
+app.use('/umkmbooster', express.static(umkmBoosterPath));
+
 // Kamus Terjemahan
 const translations = {
     "nav_home": { "id": "Beranda", "en": "Home" },
@@ -18,7 +22,7 @@ const translations = {
     "nav_consult": { "id": "Konsultasi", "en": "Consultation" },
     
     "hero_tag": { "id": "Ekosistem Digital UMKM Nasional", "en": "National MSME Digital Ecosystem" },
-    "hero_title": { "id": "Akselerasi Pertumbuhan UMKM Melalui Inovasi Digital.", "en": "Accelerating MSME Growth Through Digital Innovation." },
+    "hero_title": { "id": "Akselerasi Pertumbuhan UMKM Melalui Inovasi Digital dan Pendidikan Berkelanjutan.", "en": "Accelerating MSME Growth Through Digital Innovation and Continuous Education." },
     "hero_desc": { "id": "Ventura Indonesia hadir sebagai wadah strategis dan ekosistem terpadu yang mendampingi pelaku usaha lokal untuk bertransformasi, berdaya saing tinggi, dan mandiri secara digital di era modern.", "en": "Ventura Indonesia serves as a strategic platform and integrated ecosystem guiding local businesses to transform, become highly competitive, and achieve digital independence in the modern era." },
     "hero_title_2": { "id": "Pendampingan dan Edukasi Berkelanjutan", "en": "Continuous Mentoring and Education" },
     "hero_desc_2": { "id": "Kami mendampingi setiap langkah perjalanan UMKM melalui edukasi praktis, konsultasi strategis, dan kolaborasi berkelanjutan.", "en": "We support every step of an MSME's journey through practical education, strategic consultation, and continuous collaboration." },
@@ -65,6 +69,14 @@ app.get('/', (req, res) => {
         lang: currentLang,
         t: (key) => t(key, currentLang)
     });
+});
+
+app.get('/umkmbooster', (req, res) => {
+    res.redirect('/umkmbooster/');
+});
+
+app.get('/umkmbooster/', (req, res) => {
+    res.sendFile(path.join(umkmBoosterPath, 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
