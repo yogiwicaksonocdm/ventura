@@ -20,6 +20,8 @@ const translations = {
     "hero_tag": { "id": "Ekosistem Digital UMKM Nasional", "en": "National MSME Digital Ecosystem" },
     "hero_title": { "id": "Akselerasi Pertumbuhan UMKM Melalui Inovasi Digital dan Pendidikan Berkelanjutan.", "en": "Accelerating MSME Growth Through Digital Innovation and Continuous Education." },
     "hero_desc": { "id": "Ventura Indonesia hadir sebagai wadah strategis dan ekosistem terpadu yang mendampingi pelaku usaha lokal untuk bertransformasi, berdaya saing tinggi, dan mandiri secara digital di era modern.", "en": "Ventura Indonesia serves as a strategic platform and integrated ecosystem guiding local businesses to transform, become highly competitive, and achieve digital independence in the modern era." },
+    "hero_title_2": { "id": "Pendampingan dan Edukasi Berkelanjutan", "en": "Continuous Mentoring and Education" },
+    "hero_desc_2": { "id": "Kami mendampingi setiap langkah perjalanan UMKM melalui edukasi praktis, konsultasi strategis, dan kolaborasi berkelanjutan.", "en": "We support every step of an MSME's journey through practical education, strategic consultation, and continuous collaboration." },
     "hero_btn1": { "id": "Jelajahi Program Kami", "en": "Explore Our Programs" },
     "hero_btn2": { "id": "Bergabung Bersama Mitra", "en": "Join as a Partner" },
     
