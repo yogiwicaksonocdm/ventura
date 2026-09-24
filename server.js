@@ -83,3 +83,11 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server berjalan di http://localhost:${PORT}`);
 });
+
+// Hubungkan rute education
+const educationModule = require('./education');
+app.use('/api/education', educationModule);
+
+app.listen(3000, () => {
+    console.log('Server berjalan di port 3000');
+});
