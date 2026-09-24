@@ -7,12 +7,12 @@
     <link rel="icon" type="image/png" href="/logo.png">
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { sans: ['Space Grotesk', 'sans-serif'] },
                     colors: { ventura: { black: '#111111', dark: '#1a1a1a', gray: '#f9fafb' } }
                 }
             }
@@ -20,6 +20,9 @@
     </script>
     <style>
         html { scroll-behavior: smooth; }
+        body { overflow-x: hidden; }
+        .mobile-menu { max-height: 0; opacity: 0; overflow: hidden; visibility: hidden; pointer-events: none; transition: max-height 250ms ease, opacity 200ms ease, visibility 250ms ease; }
+        .mobile-menu.is-open { max-height: 24rem; opacity: 1; visibility: visible; pointer-events: auto; }
         .hero-slide { opacity: 0; pointer-events: none; transform: translateX(24px); transition: opacity 700ms ease, transform 700ms ease; }
         .hero-slide.is-active { opacity: 1; pointer-events: auto; transform: translateX(0); }
         .hero-dot.is-active { width: 2rem; }
@@ -34,7 +37,7 @@
                 <div class="flex-shrink-0 flex items-center gap-3">
                     <img class="h-10 w-auto" src="/logo.png" alt="Ventura Indonesia Logo">
                 </div>
-                <div class="hidden md:flex space-x-8">
+                <div class="hidden md:flex space-x-8" id="desktop-navigation">
                     <a href="#beranda" class="text-sm font-medium text-gray-900 hover:text-gray-600 transition"><%- t('nav_home') %></a>
                     <a href="#tentang" class="text-sm font-medium text-gray-900 hover:text-gray-600 transition"><%- t('nav_about') %></a>
                     <a href="#layanan" class="text-sm font-medium text-gray-900 hover:text-gray-600 transition"><%- t('nav_services') %></a>
@@ -48,6 +51,27 @@
                     <a href="#kontak" class="bg-ventura-black text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 transition shadow-lg shadow-gray-200">
                         <%- t('nav_consult') %>
                     </a>
+                </div>
+                <button id="mobile-menu-button" type="button" class="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-md text-ventura-black hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-ventura-black" aria-controls="mobile-navigation" aria-expanded="false" aria-label="Buka menu navigasi">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path id="mobile-menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="mobile-navigation" class="mobile-menu md:hidden border-t border-gray-100" aria-hidden="true">
+                <div class="flex flex-col gap-1 py-4">
+                    <a href="#beranda" class="mobile-nav-link px-3 py-3 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-100"><%- t('nav_home') %></a>
+                    <a href="#tentang" class="mobile-nav-link px-3 py-3 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-100"><%- t('nav_about') %></a>
+                    <a href="#layanan" class="mobile-nav-link px-3 py-3 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-100"><%- t('nav_services') %></a>
+                    <a href="#visi-misi" class="mobile-nav-link px-3 py-3 rounded-md text-sm font-medium text-gray-900 hover:bg-gray-100"><%- t('nav_vision') %></a>
+                    <div class="flex items-center gap-3 pt-3 mt-2 border-t border-gray-100">
+                        <a href="?lang=<%= lang === 'id' ? 'en' : 'id' %>" class="text-sm font-bold text-ventura-black bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-md transition inline-flex items-center justify-center">
+                            <%= lang === 'id' ? 'EN' : 'ID' %>
+                        </a>
+                        <a href="#kontak" class="flex-1 text-center bg-ventura-black text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-gray-800 transition">
+                            <%- t('nav_consult') %>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -243,6 +267,26 @@
 
         heroButtons.forEach((button) => {
             button.addEventListener('click', () => showHeroSlide(Number(button.dataset.slideButton)));
+        });
+
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileNavigation = document.getElementById('mobile-navigation');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+
+        const setMobileMenu = (isOpen) => {
+            mobileMenuButton.setAttribute('aria-expanded', String(isOpen));
+            mobileMenuButton.setAttribute('aria-label', isOpen ? 'Tutup menu navigasi' : 'Buka menu navigasi');
+            mobileNavigation.classList.toggle('is-open', isOpen);
+            mobileNavigation.setAttribute('aria-hidden', String(!isOpen));
+            mobileMenuIcon.setAttribute('d', isOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16');
+        };
+
+        mobileMenuButton.addEventListener('click', () => {
+            setMobileMenu(mobileMenuButton.getAttribute('aria-expanded') !== 'true');
+        });
+
+        document.querySelectorAll('.mobile-nav-link, #mobile-navigation a[href="#kontak"]').forEach((link) => {
+            link.addEventListener('click', () => setMobileMenu(false));
         });
 
         setInterval(() => showHeroSlide((activeHeroSlide + 1) % heroSlides.length), 6000);
