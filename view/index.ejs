@@ -18,7 +18,12 @@
             }
         }
     </script>
-    <style> html { scroll-behavior: smooth; } </style>
+    <style>
+        html { scroll-behavior: smooth; }
+        .hero-slide { opacity: 0; pointer-events: none; transform: translateX(24px); transition: opacity 700ms ease, transform 700ms ease; }
+        .hero-slide.is-active { opacity: 1; pointer-events: auto; transform: translateX(0); }
+        .hero-dot.is-active { width: 2rem; }
+    </style>
 </head>
 <body class="font-sans text-gray-800 bg-white antialiased">
 
@@ -49,26 +54,54 @@
     </nav>
 
     <!-- Hero Section -->
-    <section id="beranda" class="pt-32 pb-20 lg:pt-48 lg:pb-32 bg-ventura-gray overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-            <div class="text-center max-w-4xl mx-auto">
-                <span class="inline-block py-1 px-3 rounded-full bg-gray-200 text-sm font-semibold text-ventura-black mb-6 tracking-wide uppercase">
-                    <%- t('hero_tag') %>
-                </span>
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-ventura-black leading-tight tracking-tight mb-6">
-                    <%- t('hero_title') %>
-                </h1>
-                <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
-                    <%- t('hero_desc') %>
-                </p>
-                <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="#layanan" class="bg-ventura-black text-white px-8 py-3.5 rounded-full text-base font-medium hover:bg-gray-800 transition shadow-lg">
-                        <%- t('hero_btn1') %>
-                    </a>
-                    <a href="#kontak" class="bg-white text-ventura-black border border-gray-300 px-8 py-3.5 rounded-full text-base font-medium hover:bg-gray-50 transition">
-                        <%- t('hero_btn2') %>
-                    </a>
+    <section id="beranda" class="relative overflow-hidden bg-ventura-gray">
+        <div class="relative min-h-[680px]">
+            <div class="hero-slide is-active absolute inset-0 flex items-center bg-ventura-gray text-ventura-black" data-slide="0">
+                <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-4xl mx-auto pt-28 pb-24 lg:pt-40 lg:pb-32">
+                        <span class="inline-block py-1 px-3 rounded-full bg-gray-200 text-sm font-semibold mb-6 tracking-wide uppercase">
+                            <%- t('hero_tag') %>
+                        </span>
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6">
+                            <%- t('hero_title') %>
+                        </h1>
+                        <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+                            <%- t('hero_desc') %>
+                        </p>
+                        <div class="flex flex-col sm:flex-row justify-center gap-4">
+                            <a href="#layanan" class="bg-ventura-black text-white px-8 py-3.5 rounded-full text-base font-medium hover:bg-gray-800 transition shadow-lg">
+                                <%- t('hero_btn1') %>
+                            </a>
+                            <a href="#kontak" class="bg-white text-ventura-black border border-gray-300 px-8 py-3.5 rounded-full text-base font-medium hover:bg-gray-50 transition">
+                                <%- t('hero_btn2') %>
+                            </a>
+                        </div>
+                    </div>
                 </div>
+            </div>
+
+            <div class="hero-slide absolute inset-0 flex items-center bg-ventura-black text-white" data-slide="1" aria-hidden="true">
+                <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8">
+                    <div class="text-center max-w-4xl mx-auto pt-28 pb-24 lg:pt-40 lg:pb-32">
+                        <span class="inline-block py-1 px-3 rounded-full bg-gray-800 text-sm font-semibold text-gray-300 mb-6 tracking-wide uppercase">
+                            <%- t('hero_tag') %>
+                        </span>
+                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight tracking-tight mb-6">
+                            <%- t('hero_title_2') %>
+                        </h2>
+                        <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
+                            <%- t('hero_desc_2') %>
+                        </p>
+                        <a href="#tentang" class="inline-block bg-white text-ventura-black px-8 py-3.5 rounded-full text-base font-medium hover:bg-gray-100 transition shadow-lg">
+                            <%- t('hero_btn1') %>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="absolute bottom-8 left-0 right-0 z-10 flex justify-center gap-2" aria-label="Hero slides">
+                <button class="hero-dot is-active h-1.5 w-5 rounded-full bg-ventura-black transition-all" type="button" data-slide-button="0" aria-label="Slide 1"></button>
+                <button class="hero-dot h-1.5 w-5 rounded-full bg-gray-400 transition-all" type="button" data-slide-button="1" aria-label="Slide 2"></button>
             </div>
         </div>
     </section>
@@ -186,5 +219,33 @@
             <p><%- t('footer_text') %></p>
         </div>
     </footer>
+
+    <script>
+        const heroSlides = document.querySelectorAll('[data-slide]');
+        const heroButtons = document.querySelectorAll('[data-slide-button]');
+        let activeHeroSlide = 0;
+
+        const showHeroSlide = (slideIndex) => {
+            activeHeroSlide = slideIndex;
+            heroSlides.forEach((slide, index) => {
+                const isActive = index === slideIndex;
+                slide.classList.toggle('is-active', isActive);
+                slide.setAttribute('aria-hidden', String(!isActive));
+            });
+            heroButtons.forEach((button, index) => {
+                const isActive = index === slideIndex;
+                button.classList.toggle('is-active', isActive);
+                button.classList.toggle('bg-ventura-black', isActive && slideIndex === 0);
+                button.classList.toggle('bg-white', isActive && slideIndex === 1);
+                button.classList.toggle('bg-gray-400', !isActive);
+            });
+        };
+
+        heroButtons.forEach((button) => {
+            button.addEventListener('click', () => showHeroSlide(Number(button.dataset.slideButton)));
+        });
+
+        setInterval(() => showHeroSlide((activeHeroSlide + 1) % heroSlides.length), 6000);
+    </script>
 </body>
 </html>
