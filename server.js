@@ -4,7 +4,7 @@ const path = require('path');
 
 // Set EJS sebagai template engine
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'view'));
 
 // Sajikan file statis (seperti gambar, CSS, JS) dari folder 'public'
 app.use(express.static(path.join(__dirname, 'public')));
