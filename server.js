@@ -5,6 +5,8 @@ const path = require('path');
 // Set EJS sebagai template engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'view'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Sajikan file statis (seperti gambar, CSS, JS) dari folder 'public'
 app.use(express.static(path.join(__dirname, 'public')));
@@ -12,6 +14,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Modul UMKM Booster: halaman dan aset legacy diakses melalui Express.
 const umkmBoosterPath = path.join(__dirname, 'umkmbooster');
 app.use('/umkmbooster', express.static(umkmBoosterPath));
+
+const educationPath = path.join(__dirname, 'education');
+app.use('/education', express.static(educationPath));
 
 // Kamus Terjemahan
 const translations = {
@@ -79,15 +84,19 @@ app.get('/umkmbooster/', (req, res) => {
     res.sendFile(path.join(umkmBoosterPath, 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server berjalan di http://localhost:${PORT}`);
+app.get('/education', (req, res) => {
+    res.redirect('/education/');
 });
 
-// Hubungkan rute education
+app.get('/education/', (req, res) => {
+    res.sendFile(path.join(educationPath, 'index.html'));
+});
+
+// API education dipasang sebelum server mulai menerima request.
 const educationModule = require('./education');
 app.use('/api/education', educationModule);
 
-app.listen(3000, () => {
-    console.log('Server berjalan di port 3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server berjalan di http://localhost:${PORT}`);
 });

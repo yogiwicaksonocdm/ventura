@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edukasi & Pelatihan Teknopreneur | Ventura Indonesia</title>
+    <link rel="icon" type="image/png" href="/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --black: #111111;
+            --dark: #1a1a1a;
+            --gray: #f9fafb;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+        }
+
+        * { box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { margin: 0; color: var(--black); background: var(--gray); font-family: 'Space Grotesk', sans-serif; }
+        a { color: inherit; }
+        .site-header { position: sticky; top: 0; z-index: 10; background: rgba(255, 255, 255, 0.94); border-bottom: 1px solid var(--line); backdrop-filter: blur(14px); }
+        .header-inner { display: flex; align-items: center; justify-content: space-between; width: min(1120px, calc(100% - 32px)); min-height: 76px; margin: 0 auto; }
+        .brand img { display: block; width: auto; height: 42px; }
+        .back-link { font-size: 0.9rem; font-weight: 600; text-decoration: none; }
+        .back-link:hover { text-decoration: underline; }
+        main { width: min(1120px, calc(100% - 32px)); margin: 0 auto; }
+        .hero { padding: 86px 0 58px; }
+        .eyebrow { margin: 0 0 16px; color: var(--muted); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+        h1 { max-width: 760px; margin: 0 0 20px; font-size: clamp(2.5rem, 6vw, 5rem); line-height: 0.98; letter-spacing: -0.04em; }
+        .intro { max-width: 680px; margin: 0; color: var(--muted); font-size: 1.1rem; line-height: 1.7; }
+        .program-section { padding: 20px 0 88px; }
+        .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+        h2 { margin: 0; font-size: clamp(1.7rem, 3vw, 2.5rem); letter-spacing: -0.03em; }
+        .status { color: var(--muted); font-size: 0.9rem; }
+        .program-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+        .program-card { display: flex; flex-direction: column; min-height: 300px; padding: 24px; background: #fff; border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 12px 30px rgba(17, 17, 17, 0.05); }
+        .program-card:hover { border-color: #9ca3af; transform: translateY(-3px); transition: transform 180ms ease, border-color 180ms ease; }
+        .program-category { color: var(--muted); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+        h3 { margin: 14px 0 12px; font-size: 1.35rem; line-height: 1.15; }
+        .program-description { flex: 1; margin: 0 0 22px; color: var(--muted); line-height: 1.6; }
+        .program-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.84rem; }
+        .error { padding: 20px; color: #991b1b; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; }
+        .site-footer { padding: 28px 16px; color: #d1d5db; background: var(--dark); text-align: center; font-size: 0.85rem; }
+        @media (max-width: 760px) {
+            .header-inner { min-height: 68px; }
+            .brand img { height: 35px; }
+            .back-link { font-size: 0.8rem; }
+            .hero { padding: 60px 0 42px; }
+            .program-grid { grid-template-columns: 1fr; }
+            .section-heading { display: block; }
+            .status { margin-top: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="/"><img src="/logo.png" alt="Ventura Indonesia Logo"></a>
+            <a class="back-link" href="/">Kembali ke Ventura Indonesia</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <p class="eyebrow">Ventura Indonesia / Education</p>
+            <h1>Edukasi dan pelatihan untuk bisnis yang terus bertumbuh.</h1>
+            <p class="intro">Program praktis untuk membantu pelaku UMKM membangun kemampuan digital, mengelola bisnis dengan lebih baik, dan mengambil langkah berikutnya dengan percaya diri.</p>
+        </section>
+
+        <section class="program-section" aria-labelledby="program-title">
+            <div class="section-heading">
+                <h2 id="program-title">Program tersedia</h2>
+                <p id="program-status" class="status">Memuat program...</p>
+            </div>
+            <div id="program-grid" class="program-grid" aria-live="polite"></div>
+        </section>
+    </main>
+
+    <footer class="site-footer">&copy; 2026 Ventura Indonesia. Ekosistem Digital UMKM Nasional.</footer>
+
+    <script>
+        const programGrid = document.getElementById('program-grid');
+        const programStatus = document.getElementById('program-status');
+
+        const formatPrice = (price) => price === 0 ? 'Gratis' : new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(price);
+
+        const renderPrograms = (programs) => {
+            programGrid.innerHTML = programs.map((program) => `
+                <article class="program-card">
+                    <span class="program-category">${program.category}</span>
+                    <h3>${program.title}</h3>
+                    <p class="program-description">${program.description}</p>
+                    <div class="program-meta">
+                        <span>${program.duration}</span>
+                        <span>${formatPrice(program.price)}</span>
+                        <span>${program.status}</span>
+                    </div>
+                </article>
+            `).join('');
+            programStatus.textContent = `${programs.length} program tersedia`;
+        };
+
+        fetch('/api/education/programs')
+            .then((response) => {
+                if (!response.ok) throw new Error('Program tidak dapat dimuat.');
+                return response.json();
+            })
+            .then((payload) => {
+                if (!payload.success || !Array.isArray(payload.data)) throw new Error('Format data program tidak valid.');
+                renderPrograms(payload.data);
+            })
+            .catch((error) => {
+                programStatus.textContent = 'Terjadi kendala';
+                programGrid.innerHTML = `<p class="error">${error.message} Silakan coba muat ulang halaman.</p>`;
+            });
+    </script>
+</body>
+</html>
