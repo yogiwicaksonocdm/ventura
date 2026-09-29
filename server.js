@@ -18,6 +18,9 @@ app.use('/umkmbooster', express.static(umkmBoosterPath));
 const educationPath = path.join(__dirname, 'education');
 app.use('/education', express.static(educationPath));
 
+const inkubasiPath = path.join(__dirname, 'inkubasi');
+app.use('/inkubasi', express.static(inkubasiPath));
+
 // Kamus Terjemahan
 const translations = {
     "nav_home": { "id": "Beranda", "en": "Home" },
